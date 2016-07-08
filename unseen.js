@@ -27,26 +27,33 @@ function fetchMessage(messageUrl) {
 
 function downloadMessage(messageHTML, filename) {
 
-	uriContent = "data:application/octet-stream;filename=filename.html," + encodeURIComponent(messageHTML.head + messageHTML.body);
+	uriContent = "data:application/octet-stream;filename=" + filename + ".html," + encodeURIComponent(messageHTML.head + messageHTML.body);
 	a = document.createElement('a');
-	a.download = 'filename.html';
+	a.download = filename + '.html';
 	a.href = uriContent;
 	a.style.display = 'hidden';
 	document.body.appendChild(a);
 	a.click();
 	a.parentNode.removeChild(a);
-	
+
 }
 
 function getFileName(messageHTML) {
-	messageTime = messageHTML.querySelectorAll('[id^="messageDisplayTime"]');
+	messageTime = messageHTML.querySelector('[id^="messageDisplayTime"]');
 	messageTime = messageTime.innerText;
+	/*
+	sample output:
+	Sun, May 01, 2016 02:30 PM
+	*/
+	messageTime = messageTime.replace(/\s/g, '-');
+	messageTime = messageTime.replace(/,/g, '');
 	return messageTime;
 }
 
 function main() {
 	messageHTML = fetchMessage(url);
-	downloadMessage(messageHTML);
+	fileName = getFileName(messageHTML);
+	downloadMessage(messageHTML, fileName);
 }
 
 main();
