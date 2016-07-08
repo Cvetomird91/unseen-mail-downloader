@@ -41,10 +41,6 @@ function downloadMessage(messageHTML, filename) {
 function getFileName(messageHTML) {
 	messageTime = messageHTML.querySelector('[id^="messageDisplayTime"]');
 	messageTime = messageTime.innerText;
-	/*
-	sample output:
-	Sun, May 01, 2016 02:30 PM
-	*/
 	messageTime = messageTime.replace(/\s/g, '-');
 	messageTime = messageTime.replace(/,/g, '');
 	return messageTime;
