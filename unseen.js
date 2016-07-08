@@ -6,14 +6,10 @@ $('.Conv2MsgHeader').each(function(key, value) {
 });
 */
 
-/* Save file in JS
-http://stackoverflow.com/questions/7717851/save-file-javascript-with-file-name
-*/
-
 var url = 'https://webmail.unseen.is/h/printmessage?id=281&tz=Europe/Athens'
 
 function fetchMessage(messageUrl) {
-	
+
 	xhr = new XMLHttpRequest();
 	xhr.open('GET', url, false);
 	xhr.send();
@@ -30,6 +26,7 @@ function fetchMessage(messageUrl) {
 }
 
 function downloadMessage(messageHTML, filename) {
+
 	uriContent = "data:application/octet-stream;filename=filename.html," + encodeURIComponent(messageHTML.head + messageHTML.body);
 	a = document.createElement('a');
 	a.download = 'filename.html';
@@ -38,6 +35,13 @@ function downloadMessage(messageHTML, filename) {
 	document.body.appendChild(a);
 	a.click();
 	a.parentNode.removeChild(a);
+	
+}
+
+function getFileName(messageHTML) {
+	messageTime = messageHTML.querySelectorAll('[id^="messageDisplayTime"]');
+	messageTime = messageTime.innerText;
+	return messageTime;
 }
 
 function main() {
