@@ -27,7 +27,7 @@ function fetchMessage(messageUrl) {
 
 function downloadMessage(messageHTML, filename) {
 
-	uriContent = 'data:application/octet-stream;filename=' + filename + '.html,' + encodeURIComponent('<head>' + messageHTML.head.innerHTML + '</head>' + '<body>' + messageHTML.body.innerHTML + '</body>');
+	uriContent = 'data:application/octet-stream;filename=' + filename + '.html,' + encodeURIComponent('<!DOCTYPE html><html><head>' + messageHTML.head.innerHTML + '</head>' + '<body>' + messageHTML.body.innerHTML + '</body></html>');
 	a = document.createElement('a');
 	a.download = filename + '.html';
 	a.href = uriContent;
