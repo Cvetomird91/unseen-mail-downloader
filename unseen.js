@@ -8,6 +8,18 @@ $('.Conv2MsgHeader').each(function(key, value) {
 
 var url = 'https://webmail.unseen.is/h/printmessage?id=281&tz=Europe/Athens'
 
+function getMessages() {
+	var conversations = document.querySelectorAll('[id^="zli__CLV-main__"]');
+	var messages = document.getElementsByClassName('Conv2MsgHeader');
+	if (messages.length == 0) {
+		//returns the messages from the first available conversation for testing purposes
+		firstConversation = conversations[0];
+		firstConversation.click();
+		var messages = document.getElementsByClassName('Conv2MsgHeader');
+	}
+	return messages;
+}
+
 function fetchMessage(messageUrl) {
 
 	xhr = new XMLHttpRequest();
@@ -37,8 +49,8 @@ function downloadMessage(messageHTML, filename) {
 	a.parentNode.removeChild(a);
 
 }
-
 function getFileName(messageHTML) {
+
 	messageTime = messageHTML.querySelector('[id^="messageDisplayTime"]');
 	messageTime = messageTime.innerText;
 	messageTime = messageTime.replace(/\s/g, '-');
@@ -46,7 +58,13 @@ function getFileName(messageHTML) {
 	return messageTime;
 }
 
+function generateURL(messageID) {
+	var url = 'https://webmail.unseen.is/h/printmessage?id=' + messageID + '&tz=Europe/Athens';
+	return url;
+}
+
 function main() {
+	messageList = getMessages();
 	messageHTML = fetchMessage(url);
 	fileName = getFileName(messageHTML);
 	downloadMessage(messageHTML, fileName);
