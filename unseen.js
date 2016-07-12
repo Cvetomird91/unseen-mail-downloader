@@ -1,13 +1,3 @@
-/*
-$('.Conv2MsgHeader').each(function(key, value) {
-    element = $('.Conv2MsgHeader')[key];
-    $(element).click();
-    setTimeout(function(){console.log('ok')}, 10000);
-});
-*/
-
-var url = 'https://webmail.unseen.is/h/printmessage?id=281&tz=Europe/Athens'
-
 function getMessages() {
 	var conversations = document.querySelectorAll('[id^="zli__CLV-main__"]');
 	var messages = document.getElementsByClassName('Conv2MsgHeader');
@@ -17,11 +7,11 @@ function getMessages() {
 		firstConversation.click();
 		var messages = document.getElementsByClassName('Conv2MsgHeader');
 	}
+
 	return messages;
 }
 
 function fetchMessage(messageUrl) {
-
 	xhr = new XMLHttpRequest();
 	xhr.open('GET', url, false);
 	xhr.send();
@@ -34,11 +24,9 @@ function fetchMessage(messageUrl) {
 	printDialog.parentNode.removeChild(printDialog);
 
 	return mailPage;
-
 }
 
 function downloadMessage(messageHTML, filename) {
-
 	uriContent = 'data:application/octet-stream;filename=' + filename + '.html,' + encodeURIComponent('<!DOCTYPE html><html><head>' + messageHTML.head.innerHTML + '</head>' + '<body>' + messageHTML.body.innerHTML + '</body></html>');
 	a = document.createElement('a');
 	a.download = filename + '.html';
@@ -47,14 +35,14 @@ function downloadMessage(messageHTML, filename) {
 	document.body.appendChild(a);
 	a.click();
 	a.parentNode.removeChild(a);
-
 }
-function getFileName(messageHTML) {
 
+function getFileName(messageHTML) {
 	messageTime = messageHTML.querySelector('[id^="messageDisplayTime"]');
 	messageTime = messageTime.innerText;
 	messageTime = messageTime.replace(/\s/g, '-');
 	messageTime = messageTime.replace(/,/g, '');
+	messageTime = messageTime.replace(/:/, '');
 	return messageTime;
 }
 
@@ -63,11 +51,46 @@ function generateURL(messageID) {
 	return url;
 }
 
+function getMessageIDs(messages) {
+	messageIDs = [];
+	for (var i in messages) {
+		if (typeof messages[i].id !== 'undefined') {
+			rawID = messages[i].id;
+			messageIDs.push(rawID.match('[0-9]{3}')[0]);
+		} else {
+			continue;
+		}
+	}
+
+	//sample id: main_MSGC918__header
+	return messageIDs;
+}
+
+/*
+$('.Conv2MsgHeader').each(function(key, value) {
+    element = $('.Conv2MsgHeader')[key];
+    $(element).click();
+    setTimeout(function(){console.log('ok')}, 10000);
+});
+*/
+
 function main() {
-	messageList = getMessages();
-	messageHTML = fetchMessage(url);
-	fileName = getFileName(messageHTML);
-	downloadMessage(messageHTML, fileName);
+	var messageList = getMessages();
+
+	var messageIDs = getMessageIDs(messageList);
+
+	messageURLs = [];
+	for (var msg in messageIDs) {
+		url = generateURL(messageIDs[msg]);
+		messageURLs.push(url);
+	}
+
+	for (var id in messageURLs) {
+		var messageHTML = fetchMessage(messageURLs[id]);
+		var fileName = getFileName(messageHTML);
+		downloadMessage(messageHTML, fileName);
+	}
+
 }
 
 main();
