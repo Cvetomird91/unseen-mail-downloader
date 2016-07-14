@@ -15,20 +15,20 @@ function fetchMessageHTML(messageUrl) {
 	var xhr = new XMLHttpRequest();
 	xhr.open('GET', messageUrl, false);
 	xhr.send();
-	doc = xhr.responseText;
-	parser = new DOMParser();
-	mailPage = parser.parseFromString(doc, 'text/html');
+	var doc = xhr.responseText;
+	var parser = new DOMParser();
+	var mailPage = parser.parseFromString(doc, 'text/html');
 
 	//remove JavaScript that starts print browser dialog
-	printDialog = mailPage.getElementsByTagName('script')[4];
+	var printDialog = mailPage.getElementsByTagName('script')[4];
 	printDialog.parentNode.removeChild(printDialog);
 
 	return mailPage;
 }
 
 function downloadMessage(messageHTML, filename) {
-	uriContent = 'data:application/octet-stream;filename=' + filename + '.html,' + encodeURIComponent('<!DOCTYPE html><html><head>' + messageHTML.head.innerHTML + '</head>' + '<body>' + messageHTML.body.innerHTML + '</body></html>');
-	a = document.createElement('a');
+	var uriContent = 'data:application/octet-stream;filename=' + filename + '.html,' + encodeURIComponent('<!DOCTYPE html><html><head>' + messageHTML.head.innerHTML + '</head>' + '<body>' + messageHTML.body.innerHTML + '</body></html>');
+	var a = document.createElement('a');
 	a.download = filename + '.html';
 	a.href = uriContent;
 	a.style.display = 'hidden';
@@ -53,7 +53,7 @@ function generateURL(messageID) {
 }
 
 function getMessageIDs(messages) {
-	messageIDs = [];
+	var messageIDs = [];
 	for (var i in messages) {
 		if (typeof messages[i].id !== 'undefined') {
 			rawID = messages[i].id;
@@ -72,9 +72,9 @@ function main() {
 
 	var messageIDs = getMessageIDs(messageList);
 
-	messageURLs = [];
+	var messageURLs = [];
 	for (var msg in messageIDs) {
-		url = generateURL(messageIDs[msg]);
+		var url = generateURL(messageIDs[msg]);
 		console.log(url);
 		messageURLs.push(url);
 	}
@@ -82,7 +82,7 @@ function main() {
 	for (var id in messageURLs) {
 		var messageHTML = fetchMessageHTML(messageURLs[id]);
 		var fileName = getFileName(messageHTML);
-		//downloadMessage(messageHTML, fileName);
+		downloadMessage(messageHTML, fileName);
 	}
 
 }
