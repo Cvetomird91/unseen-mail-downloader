@@ -11,15 +11,15 @@ function getMessages() {
 	return messages;
 }
 
-function fetchMessage(messageUrl) {
-	xhr = new XMLHttpRequest();
-	xhr.open('GET', url, false);
+function fetchMessageHTML(messageUrl) {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', messageUrl, false);
 	xhr.send();
 	doc = xhr.responseText;
 	parser = new DOMParser();
 	mailPage = parser.parseFromString(doc, 'text/html');
 
-	//remove JavaScript that starts print dialog
+	//remove JavaScript that starts print browser dialog
 	printDialog = mailPage.getElementsByTagName('script')[4];
 	printDialog.parentNode.removeChild(printDialog);
 
@@ -38,7 +38,8 @@ function downloadMessage(messageHTML, filename) {
 }
 
 function getFileName(messageHTML) {
-	messageTime = messageHTML.querySelector('[id^="messageDisplayTime"]');
+	var messageTimes = messageHTML.querySelectorAll('[id^="messageDisplayTime"]');
+	var messageTime = messageTimes[0];
 	messageTime = messageTime.innerText;
 	messageTime = messageTime.replace(/\s/g, '-');
 	messageTime = messageTime.replace(/,/g, '');
@@ -66,14 +67,6 @@ function getMessageIDs(messages) {
 	return messageIDs;
 }
 
-/*
-$('.Conv2MsgHeader').each(function(key, value) {
-    element = $('.Conv2MsgHeader')[key];
-    $(element).click();
-    setTimeout(function(){console.log('ok')}, 10000);
-});
-*/
-
 function main() {
 	var messageList = getMessages();
 
@@ -82,13 +75,14 @@ function main() {
 	messageURLs = [];
 	for (var msg in messageIDs) {
 		url = generateURL(messageIDs[msg]);
+		console.log(url);
 		messageURLs.push(url);
 	}
 
 	for (var id in messageURLs) {
-		var messageHTML = fetchMessage(messageURLs[id]);
+		var messageHTML = fetchMessageHTML(messageURLs[id]);
 		var fileName = getFileName(messageHTML);
-		downloadMessage(messageHTML, fileName);
+		//downloadMessage(messageHTML, fileName);
 	}
 
 }
