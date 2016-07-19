@@ -54,13 +54,14 @@ function generateURL(messageID) {
 
 function getMessageIDs(messages) {
 	var messageIDs = [];
-	for (var i in messages) {
+
+	for (i = 0; i <= messages.length; i++) {
 		if (typeof messages[i].id !== 'undefined') {
 			rawID = messages[i].id;
-			messageIDs.push(rawID.match('[0-9]{3}')[0]);
-		} else {
-			continue;
-		}
+			msgID = rawID.match('[0-9]{3}')[0];
+			messageIDs.push(msgID);
+			console.log(typeof messages[i].id);
+		} 
 	}
 
 	//sample id: main_MSGC918__header
@@ -69,7 +70,6 @@ function getMessageIDs(messages) {
 
 function main() {
 	var messageList = getMessages();
-
 	var messageIDs = getMessageIDs(messageList);
 
 	var messageURLs = [];
@@ -79,11 +79,30 @@ function main() {
 		messageURLs.push(url);
 	}
 
+	var messageCount = messageURLs.length;
+
 	for (var id in messageURLs) {
 		var messageHTML = fetchMessageHTML(messageURLs[id]);
 		var fileName = getFileName(messageHTML);
-		downloadMessage(messageHTML, fileName);
+		console.log(fileName);
+		//http://stackoverflow.com/questions/7749090/how-to-use-setinterval-function-within-for-loop
+		setInterval('downloadMessage(messageHTML, fileName)', 1500);
 	}
+
+	/*
+	var id = 0;
+
+	setInterval(function() {
+		if (id <= messageCount) {
+			var messageHTML = fetchMessageHTML(messageURLs[id]);
+			var fileName = getFileName(messageHTML);
+			//downloadMessage(messageHTML, fileName);
+			console.log(fileName);
+			id += 1;
+		} else return;
+		
+	}, 1500);
+	*/
 
 }
 
