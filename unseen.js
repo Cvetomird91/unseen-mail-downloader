@@ -70,13 +70,15 @@ function generateURL(messageID) {
 function getMessageIDs(messages) {
 	var messageIDs = [];
 
-	for (i = 0; i <= messages.length; i++) {
-		if (typeof messages[i].id !== 'undefined') {
+	for (var i = 0; i <= messages.length; i++) {
+		if (typeof messages[i].id !== 'undefined')
+			continue;
+
 			var rawID = messages[i].id;
 			var msgID = rawID.match('[0-9]{3}')[0];
 			messageIDs.push(msgID);
 			console.log(typeof messages[i].id);
-		}
+
 	}
 
 	//sample id: main_MSGC918__header
