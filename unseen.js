@@ -72,8 +72,8 @@ function getMessageIDs(messages) {
 
 	for (i = 0; i <= messages.length; i++) {
 		if (typeof messages[i].id !== 'undefined') {
-			rawID = messages[i].id;
-			msgID = rawID.match('[0-9]{3}')[0];
+			var rawID = messages[i].id;
+			var msgID = rawID.match('[0-9]{3}')[0];
 			messageIDs.push(msgID);
 			console.log(typeof messages[i].id);
 		}
