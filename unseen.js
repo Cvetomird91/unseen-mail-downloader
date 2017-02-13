@@ -3,7 +3,7 @@ function getMessages() {
 	var messages = document.getElementsByClassName('Conv2MsgHeader');
 	if (messages.length === 0) {
 		//returns the messages from the first available conversation for testing purposes
-		varfirstConversation = conversations[0];
+		var firstConversation = conversations[0];
 		firstConversation.click();
 		var messages = document.getElementsByClassName('Conv2MsgHeader');
 	}
