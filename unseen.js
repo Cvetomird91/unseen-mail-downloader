@@ -1,6 +1,21 @@
 function getMessages() {
 	var conversations = document.querySelectorAll('[id^="zli__CLV-main__"]');
 	var messages = document.getElementsByClassName('Conv2MsgHeader');
+	if (messages.length === 0) {
+		//returns the messages from the first available conversation for testing purposes
+		varfirstConversation = conversations[0];
+		firstConversation.click();
+		var messages = document.getElementsByClassName('Conv2MsgHeader');
+	}
+
+	return messages;
+}
+
+/*
+
+function getMessages(conversationId) {
+	var conversations = document.querySelectorAll('[id^="zli__CLV-main__"]');
+	var messages = document.getElementsByClassName('Conv2MsgHeader');
 	if (messages.length == 0) {
 		//returns the messages from the first available conversation for testing purposes
 		firstConversation = conversations[0];
@@ -10,6 +25,8 @@ function getMessages() {
 
 	return messages;
 }
+
+*/
 
 function fetchMessageHTML(messageUrl) {
 	var xhr = new XMLHttpRequest();
@@ -41,10 +58,8 @@ function getFileName(messageHTML) {
 	var messageTimes = messageHTML.querySelectorAll('[id^="messageDisplayTime"]');
 	var messageTime = messageTimes[0];
 	messageTime = messageTime.innerText;
-	messageTime = messageTime.replace(/\s/g, '-');
-	messageTime = messageTime.replace(/,/g, '');
-	messageTime = messageTime.replace(/:/, '');
-	return messageTime;
+
+	return messageTime.innerText.replace(/\s/g, '-').replace(/,/g, '').replace(/:/, '');
 }
 
 function generateURL(messageID) {
@@ -61,7 +76,7 @@ function getMessageIDs(messages) {
 			msgID = rawID.match('[0-9]{3}')[0];
 			messageIDs.push(msgID);
 			console.log(typeof messages[i].id);
-		} 
+		}
 	}
 
 	//sample id: main_MSGC918__header
@@ -86,7 +101,7 @@ function main() {
 		var fileName = getFileName(messageHTML);
 		console.log(fileName);
 		//http://stackoverflow.com/questions/7749090/how-to-use-setinterval-function-within-for-loop
-		setInterval('downloadMessage(messageHTML, fileName)', 1500);
+		//setInterval('downloadMessage(messageHTML, fileName)', 1500);
 	}
 
 	/*
@@ -100,10 +115,17 @@ function main() {
 			console.log(fileName);
 			id += 1;
 		} else return;
-		
 	}, 1500);
 	*/
 
 }
 
-main();
+var URL = 'http://webmail.unseen.is';
+
+function getSoAPIUrl() {
+	return getWebMailURL() + '/service/soap/';
+}
+
+function getWebMailURL() {
+	return URL;
+}
