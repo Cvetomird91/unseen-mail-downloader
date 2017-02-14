@@ -57,7 +57,6 @@ function downloadMessage(messageHTML, filename) {
 function getFileName(messageHTML) {
 	var messageTimes = messageHTML.querySelectorAll('[id^="messageDisplayTime"]');
 	var messageTime = messageTimes[0];
-	messageTime = messageTime.innerText;
 
 	return messageTime.innerText.replace(/\s/g, '-').replace(/,/g, '').replace(/:/, '');
 }
@@ -74,10 +73,10 @@ function getMessageIDs(messages) {
 		if (typeof messages[i].id !== 'undefined')
 			continue;
 
-			var rawID = messages[i].id;
-			var msgID = rawID.match('[0-9]{3}')[0];
-			messageIDs.push(msgID);
-			console.log(typeof messages[i].id);
+		var rawID = messages[i].id;
+		var msgID = rawID.match('[0-9]{3}')[0];
+		messageIDs.push(msgID);
+		console.log(typeof messages[i].id);
 
 	}
 
