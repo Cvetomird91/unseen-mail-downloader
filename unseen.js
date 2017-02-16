@@ -56,7 +56,13 @@ function downloadMessage(messageHTML, filename) {
 
 function getFileName(messageHTML) {
 	var messageTimes = messageHTML.querySelectorAll('[id^="messageDisplayTime"]');
-	var messageTime = messageTimes[0];
+	var messageTime = '';
+
+	if (messageTimes)
+		var messageTime = messageTimes[0];
+
+	if (!messageTime)
+		return;
 
 	return messageTime.innerText.replace(/\s/g, '-').replace(/,/g, '').replace(/:/, '');
 }
